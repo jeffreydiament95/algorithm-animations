@@ -72,10 +72,8 @@ class LongIncPathMatrix(Scene):
                 y, x = i + dy, j + dx
                 if 0 <= y < m and 0 <= x < n and matrix[y][x] > matrix[i][j]:
                     new_index = self.two_dim_to_one_dim(y, x, n)
-                    # arrow_scale = 1.5 if dy != 0 else 1  # Increase size of vertical arrows
-                    arrow_scale = 1
-                    arrow_matrix = Arrow(matrix_mob.get_entries()[index].get_center(), matrix_mob.get_entries()[new_index].get_center(), buff=0.3).scale(arrow_scale)
-                    arrow_memo = Arrow(memo_mob.get_entries()[index].get_center(), memo_mob.get_entries()[new_index].get_center(), buff=0.3).scale(arrow_scale)
+                    arrow_matrix = Arrow(matrix_mob.get_entries()[index].get_center(), matrix_mob.get_entries()[new_index].get_center(), buff=0.3)
+                    arrow_memo = Arrow(memo_mob.get_entries()[index].get_center(), memo_mob.get_entries()[new_index].get_center(), buff=0.3)
                     self.play(Create(arrow_matrix), Create(arrow_memo))
                     max_path = max(max_path, dfs(y, x) + 1)
                     self.play(FadeOut(arrow_memo))
@@ -92,22 +90,6 @@ class LongIncPathMatrix(Scene):
             for j in range(n):
                 dfs(i, j)
                 
-        self.draw_longest_path(matrix, memo, matrix_mob, memo_mob)
         longest_path = max([max(row) for row in memo])
         
         return longest_path
-    
-    def draw_longest_path(self, matrix, memo, matrix_mob, memo_mob):
-        # Get the index of the maximum path length in the memo matrix
-        max_value = max(max(row) for row in memo)
-        for i, row in enumerate(memo):
-            for j, value in enumerate(row):
-                if value == max_value:
-                    index = (i, j)
-                    break
-            else:
-                continue
-            break
-        
-        # trace the path back to the start and draw green arrows on the memo matrix along the way
-        # while True:
